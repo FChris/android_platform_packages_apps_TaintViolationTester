@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TaintViolationTester</string>
+    <string name="send_untainted">Send Untainted</string>
+    <string name="send_tainted">Send Tainted</string>
 </resources>
