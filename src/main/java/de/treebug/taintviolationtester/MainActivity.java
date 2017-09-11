@@ -2,12 +2,16 @@ package de.treebug.taintviolationtester;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends Activity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private Button button_sendTainted;
     private Button button_sendUntainted;
@@ -29,7 +33,10 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                 String deviceId = telephonyManager.getDeviceId();
-                new SendDataTask().execute("localhost:12345", deviceId);
+                SendDataTask sendDataTask = new SendDataTask();
+                sendDataTask.execute("localhost:12345", deviceId);
+
+                Log.v(TAG, "Send tainted");
 
             }
         });
@@ -39,6 +46,8 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 String data = "Untainted Data created locally";
                 new SendDataTask().execute("localhost:12345", data);
+
+                Log.v(TAG, "Send tainted");
             }
         });
     }
