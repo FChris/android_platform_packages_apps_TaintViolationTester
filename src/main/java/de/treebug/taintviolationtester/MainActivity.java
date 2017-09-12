@@ -33,8 +33,7 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                 String deviceId = telephonyManager.getDeviceId();
-                SendDataTask sendDataTask = new SendDataTask();
-                sendDataTask.execute("localhost:12345", deviceId);
+                new SendDataTask().execute("http://posttestserver.com", deviceId);
 
                 Log.v(TAG, "Send tainted");
 
@@ -45,9 +44,9 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 String data = "Untainted Data created locally";
-                new SendDataTask().execute("localhost:12345", data);
+                new SendDataTask().execute("http://posttestserver.com", data);
 
-                Log.v(TAG, "Send tainted");
+                Log.v(TAG, "Send untainted");
             }
         });
     }

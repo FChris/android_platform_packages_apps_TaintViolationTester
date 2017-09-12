@@ -16,11 +16,14 @@ import java.net.URL;
 public class SendDataTask extends AsyncTask<String, Void, String>{
     private static final String TAG = SendDataTask.class.getSimpleName();
 
+    private Exception ex = null;
+
     @Override
     protected String doInBackground(String... params) {
         String data = "";
 
         HttpURLConnection httpURLConnection = null;
+        Log.d(TAG, "Taint: Starting async exec");
 
         try {
             httpURLConnection = (HttpURLConnection) new URL(params[0]).openConnection();
@@ -44,8 +47,9 @@ public class SendDataTask extends AsyncTask<String, Void, String>{
             }
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            ex = e;
+            Log.e(TAG, "Taint: "+e.getMessage());
         } finally {
             if (httpURLConnection != null) {
                 httpURLConnection.disconnect();
@@ -57,6 +61,12 @@ public class SendDataTask extends AsyncTask<String, Void, String>{
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        Log.e(TAG, result); // this is expecting a response code to be sent from your server upon receiving the POST data
+
+        if (ex != null) {
+            Log.e(TAG, "Taint: " + ex.getMessage());
+        }
+
+        Log.d(TAG, result); // this is expecting a response code to be sent from your server upon receiving the POST data
     }
+
 }
