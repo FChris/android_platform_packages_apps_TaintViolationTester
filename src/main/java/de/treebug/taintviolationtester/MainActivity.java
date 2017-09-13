@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
+import android.os.GenGpioManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,9 +31,9 @@ public class MainActivity extends Activity {
         button_sendTainted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                String deviceId = telephonyManager.getDeviceId();
-                new SendDataTask().execute("http://posttestserver.com", deviceId);
+                GenGpioManager manager = (GenGpioManager) getSystemService(Context.GENGPIO_SERVICE);
+                String gpioData = manager.read(32, 0);
+                new SendDataTask().execute("http://posttestserver.com", gpioData);
 
                 Log.v(TAG, "Send tainted");
 
